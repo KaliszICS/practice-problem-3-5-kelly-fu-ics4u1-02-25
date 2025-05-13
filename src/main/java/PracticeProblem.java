@@ -60,59 +60,29 @@ public class PracticeProblem {
 
 
    
-    public static int noOfPaths(String[][] maze) {
-        int rows = maze.length;
-        int cols = maze[0].length;
+   public static int noOfPaths(String[][] pathArr) {
+			int col = 0;
+			int row = pathArr.length - 1;
 
-  
-        int startRow = rows - 1;
-        int startCol = 0;
+			return noOfPathsHelper(pathArr, row, col);
+		}
 
-        boolean[][] visited = new boolean[rows][cols];
-        return dfs(maze, startRow, startCol, visited);
-    }
+		public static int noOfPathsHelper(String[][] pathArr, int row, int col) {
+			int cols = pathArr[0].length;
+			int rows = pathArr.length;
 
+			if (row < 0 || row >= rows || col < 0 || col >= cols) {
+				return 0;
+			}
+			
+			if (pathArr[row][col].equals("F")) {
+				return 1;
+			}
 
-    private static int dfs(String[][] maze, int row, int col, boolean[][] visited) {
-        int rows = maze.length;
-        int cols = maze[0].length;
-
-        
-        if (row < 0 || row >= rows || col < 0 || col >= cols) {
-            return 0;
-        }
-
-        
-        String cell = maze[row][col];
-        if (!cell.equals("") && !cell.equals("S") && !cell.equals("F")) {
-            return 0;
-        }
-
-       
-        if (visited[row][col]) {
-            return 0;
-        }
-
-        
-        if (cell.equals("F")) {
-            return 1;
-        }
-
-
-        visited[row][col] = true;
-
-
-        int totalPaths = 0;
-        totalPaths += dfs(maze, row + 1, col, visited); 
-        totalPaths += dfs(maze, row - 1, col, visited); 
-        totalPaths += dfs(maze, row, col + 1, visited); 
-        totalPaths += dfs(maze, row, col - 1, visited); 
-
-  
-        visited[row][col] = false;
-
-        return totalPaths;
-    }
+			int right = noOfPathsHelper(pathArr, row, col + 1);
+			int up = noOfPathsHelper(pathArr, row - 1, col);
+			return up + right;
+		}
 }
 
 
